@@ -1,0 +1,1620 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1000</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>EcoDrive</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QFrame#sidebarFrame {
+    background-color: transparent;
+}
+
+QPushButton {
+    background-color: transparent; 
+    font-weight: bold;
+    color: #687c94;  
+    border: none;
+    text-align: left;
+    padding-left: 10px;
+}
+
+Line {
+	color: #687c94; 
+	background-color: #687c94;
+	border: none;
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">QWidget#centralwidget {
+    background-color: #0d1117; 
+}</string>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QFrame" name="sidebarFrame">
+      <property name="minimumSize">
+       <size>
+        <width>220</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>220</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame#sidebarFrame {
+    background-color: #181d24; 
+    border-right: 2px solid #30363d;
+}
+QLabel#titleLabel{
+	color: #00c896;
+	letter-spacing: 3px;
+}
+</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Shape::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>41</number>
+       </property>
+       <property name="rightMargin">
+        <number>20</number>
+       </property>
+       <property name="bottomMargin">
+        <number>20</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="titleLabel">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>24</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string> ECO DRIVE         </string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="routeAnalysisButton">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>60</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Route Analysis</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="dashboardButton">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>60</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Travel History</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="settingsButton">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>60</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Settings</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QFrame" name="userProfileWidget">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QFrame#userProfileWidget {
+    border: 0px solid #161b22;
+}</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Shape::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Shadow::Raised</enum>
+         </property>
+         <property name="lineWidth">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="horizontalLayoutWidget_6">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>181</width>
+            <height>51</height>
+           </rect>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_7">
+           <item>
+            <widget class="QLabel" name="iconLabel">
+             <property name="maximumSize">
+              <size>
+               <width>40</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLabel {
+	border-radius: 20px; 
+	background-color: #d1f7ec; 
+	color: #0d1117;
+}</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_7">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="carModelLabel">
+               <property name="font">
+                <font>
+                 <pointsize>16</pointsize>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Model</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="descriptionLabel">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>7.1 L/100km • Diesel</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="mainWindowFrame">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Shape::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Raised</enum>
+      </property>
+      <widget class="QStackedWidget" name="stackedWidget">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>781</width>
+         <height>701</height>
+        </rect>
+       </property>
+       <property name="lineWidth">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="settingsPage">
+        <widget class="QFrame" name="vehicleProfileCard">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>170</y>
+           <width>300</width>
+           <height>391</height>
+          </rect>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QFrame#vehicleProfileCard {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+}
+QLabel {
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+}
+QLineEdit {
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    color: white;
+    padding: 8px;
+}
+QPushButton#saveProfileButton {
+    background-color: #00c896;
+    color: black;
+    border-radius: 8px;
+    font-weight: bold;
+    height: 40px;
+}
+QPushButton#petrolButton, QPushButton#dieselButton{
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    color: gray;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+/* Mygtukas, kurį vartotojas pasirinko */
+QPushButton#petrolButton:checked {
+    background-color: #161b22;
+    border: 2px solid #00c896;
+    color: white;
+    font-weight: bold;
+}
+
+QPushButton#dieselButton:checked {
+    background-color: #161b22;
+    border: 2px solid #00c896;
+    color: white;
+    font-weight: bold;
+}</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Shape::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Shadow::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <property name="spacing">
+           <number>19</number>
+          </property>
+          <property name="topMargin">
+           <number>21</number>
+          </property>
+          <property name="bottomMargin">
+           <number>21</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Vehicle Profile</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="carModelLine">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>47</height>
+             </size>
+            </property>
+            <property name="placeholderText">
+             <string>Car model (optional)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="avgCansumptionEnterLine">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>47</height>
+             </size>
+            </property>
+            <property name="placeholderText">
+             <string>Avg. Consumption (L/100km)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="priceLine_2">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>47</height>
+             </size>
+            </property>
+            <property name="placeholderText">
+             <string>Fuel Price (€/L)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <property name="spacing">
+             <number>-1</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <item alignment="Qt::AlignmentFlag::AlignLeft">
+             <widget class="QPushButton" name="petrolButton">
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    text-align: center;
+}</string>
+              </property>
+              <property name="text">
+               <string>Petrol</string>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignmentFlag::AlignRight">
+             <widget class="QPushButton" name="dieselButton">
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    text-align: center;
+}</string>
+              </property>
+              <property name="text">
+               <string>Diesel</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QPushButton" name="saveProfileButton">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    text-align: center;
+    padding: 5px; 
+}</string>
+            </property>
+            <property name="text">
+             <string>Save Profile</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QLabel" name="travelCostCalculatorLabel_2">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>40</y>
+           <width>431</width>
+           <height>61</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>36</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Vehicle Profile &amp; Settings</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="travelCostCalculatorLabel_3">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>70</y>
+           <width>431</width>
+           <height>61</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>16</pointsize>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+	color: #687c94; 
+}</string>
+         </property>
+         <property name="text">
+          <string>Your car details are used for all calculations</string>
+         </property>
+        </widget>
+        <widget class="QFrame" name="fuelPriceCard">
+         <property name="geometry">
+          <rect>
+           <x>410</x>
+           <y>170</y>
+           <width>300</width>
+           <height>281</height>
+          </rect>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QFrame#fuelPriceCard {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+}
+QLabel#fuelPriceTitleLabel {
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+}
+QPushButton#saveProfileButton {
+    background-color: #00c896;
+    color: black;
+    border-radius: 8px;
+    font-weight: bold;
+    height: 40px;
+}
+
+</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Shape::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Shadow::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <property name="spacing">
+           <number>7</number>
+          </property>
+          <property name="topMargin">
+           <number>21</number>
+          </property>
+          <property name="bottomMargin">
+           <number>21</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="fuelPriceTitleLabel">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Fuel Price Source</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <item>
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Current price (API)</string>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignmentFlag::AlignRight">
+             <widget class="QLabel" name="currentPriceAPILabel">
+              <property name="font">
+               <font>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLabel {
+	color: #00c896;
+}</string>
+              </property>
+              <property name="text">
+               <string>1.88 €/L</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_9">
+            <item>
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>Last updated</string>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignmentFlag::AlignRight">
+             <widget class="QLabel" name="lastUpdatedLabel">
+              <property name="font">
+               <font>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Today, 14:32</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <item>
+             <widget class="QLabel" name="sourceLabel">
+              <property name="text">
+               <string>Source</string>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignmentFlag::AlignRight">
+             <widget class="QLabel" name="source2Label">
+              <property name="font">
+               <font>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Fuel Price API</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="acceptDrops">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Price is fetched automatically. You don't need to enter it manually.</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="RouteAnalysisPage">
+        <widget class="QFrame" name="parametersCard">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>120</y>
+           <width>650</width>
+           <height>241</height>
+          </rect>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>600</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>650</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QFrame#parametersCard {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+}
+QLabel {
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+}
+QLineEdit {
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    color: white;
+    padding: 8px;
+}
+QPushButton#calculateButton {
+    background-color: #00c896;
+    color: black;
+    border-radius: 8px;
+    font-weight: bold;
+    height: 40px;
+}</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Shape::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Shadow::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Parameters</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_12">
+            <item>
+             <widget class="QLabel" name="label_6">
+              <property name="styleSheet">
+               <string notr="true">QLabel {
+    background-color: #e67a07;
+    border-radius: 6px; 
+    min-width: 12px;
+    min-height: 12px;
+    max-width: 12px;
+    max-height: 12px;
+}</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="startLine">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="placeholderText">
+               <string>Starting City (e.g. Vilnius)</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_13">
+            <item>
+             <widget class="QLabel" name="label_7">
+              <property name="styleSheet">
+               <string notr="true">QLabel {
+    background-color: #00c896;
+    border-radius: 6px; 
+    min-width: 12px;
+    min-height: 12px;
+    max-width: 12px;
+    max-height: 12px;
+}</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="destinationLine">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="placeholderText">
+               <string>Destination (e.g. Kaunas)</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_11">
+            <property name="spacing">
+             <number>-1</number>
+            </property>
+            <property name="sizeConstraint">
+             <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
+            </property>
+            <item>
+             <widget class="QLineEdit" name="priceLine">
+              <property name="minimumSize">
+               <size>
+                <width>40</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="placeholderText">
+               <string>Fuel Price (€/L)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="consumptionLine">
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="placeholderText">
+               <string>Avg. Consumption (L/100km)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="calculateButton">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    text-align: center;
+    padding: 5px; 
+}</string>
+              </property>
+              <property name="text">
+               <string>Calculate Trip</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QLabel" name="travelCostCalculatorLabel">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>40</y>
+           <width>431</width>
+           <height>61</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>36</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Route Analysis</string>
+         </property>
+        </widget>
+        <widget class="QFrame" name="apperingOnCalculateTripFrame">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>340</y>
+           <width>651</width>
+           <height>141</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QFrame {
+    border:  transparent;
+}</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Shape::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Shadow::Raised</enum>
+         </property>
+         <widget class="QWidget" name="horizontalLayoutWidget">
+          <property name="geometry">
+           <rect>
+            <x>-10</x>
+            <y>40</y>
+            <width>671</width>
+            <height>80</height>
+           </rect>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QFrame" name="fuelRequiredFrame">
+             <property name="maximumSize">
+              <size>
+               <width>198</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QFrame#fuelRequiredFrame {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+}</string>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::Shape::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Shadow::Raised</enum>
+             </property>
+             <widget class="QWidget" name="verticalLayoutWidget_3">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>121</width>
+                <height>61</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_9">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="distanceLabel_2">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>35</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Fuel Required</string>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignmentFlag::AlignLeft">
+                <widget class="QLabel" name="distanceResult_2">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>35</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>25</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>--- L</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+           <item>
+            <widget class="QFrame" name="distanceFrame">
+             <property name="maximumSize">
+              <size>
+               <width>198</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QFrame#distanceFrame {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+}</string>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::Shape::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Shadow::Raised</enum>
+             </property>
+             <widget class="QWidget" name="verticalLayoutWidget_2">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>121</width>
+                <height>61</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_8">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="distanceLabel">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>35</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Distance</string>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignmentFlag::AlignLeft">
+                <widget class="QLabel" name="distanceResult">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>35</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>25</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>--- km</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+           <item>
+            <widget class="QFrame" name="priceFrame">
+             <property name="maximumSize">
+              <size>
+               <width>198</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QFrame#priceFrame {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+}</string>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::Shape::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Shadow::Raised</enum>
+             </property>
+             <widget class="QWidget" name="verticalLayoutWidget_4">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>121</width>
+                <height>61</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_10">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="distanceLabel_3">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>35</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>Price</string>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignmentFlag::AlignLeft">
+                <widget class="QLabel" name="distanceResult_3">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>35</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>25</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>--- €</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+        <widget class="QFrame" name="availableRoutesCard">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>480</y>
+           <width>650</width>
+           <height>200</height>
+          </rect>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>600</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>650</width>
+           <height>200</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QFrame#availableRoutesCard {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+}
+QLabel {
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+}
+QLineEdit {
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    color: white;
+    padding: 8px;
+}
+QPushButton#calculateButton {
+    background-color: #00c896;
+    color: black;
+    border-radius: 8px;
+    font-weight: bold;
+    height: 40px;
+}</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Shape::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Shadow::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QLabel" name="label_8">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>-1</pointsize>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Available Routes</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="frame">
+            <property name="styleSheet">
+             <string notr="true">QFrame{
+    border: 0px solid #161b22;
+}</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QWidget" name="">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>621</width>
+               <height>50</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_14">
+              <item>
+               <widget class="QLabel" name="label_9">
+                <property name="maximumSize">
+                 <size>
+                  <width>100</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QLabel {
+    background-color: #00c896;
+    color: #0d1117;
+    border-radius: 10px;
+    font-size: 10px;
+    padding: 2px 6px;
+    font-weight: bold;
+    align: center;
+    qproperty-alignment: 'AlignHCenter | AlignVCenter';
+}
+
+</string>
+                </property>
+                <property name="text">
+                 <string>Cheapest</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="cheapestKmLabel">
+                <property name="maximumSize">
+                 <size>
+                  <width>200</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QLabel {
+    color: gray;
+}</string>
+                </property>
+                <property name="text">
+                 <string>~180 km</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="cheapestTimeLabel">
+                <property name="maximumSize">
+                 <size>
+                  <width>300</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QLabel {
+    color: gray;
+}</string>
+                </property>
+                <property name="text">
+                 <string>~1h 30min</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Policy::Preferred</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>200</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_14">
+                <property name="styleSheet">
+                 <string notr="true">QLabel {
+    color: gray;
+}</string>
+                </property>
+                <property name="text">
+                 <string>12.8 €</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_15">
+            <item>
+             <widget class="QLabel" name="label_10">
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLabel {
+    background-color: gray;
+    color: #0d1117;
+    border-radius: 10px;
+    font-size: 10px;
+    padding: 2px 6px;
+    font-weight: bold;
+    align: center;
+    qproperty-alignment: 'AlignHCenter | AlignVCenter';
+}</string>
+              </property>
+              <property name="text">
+               <string>Alternative</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_11">
+              <property name="maximumSize">
+               <size>
+                <width>300</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLabel {
+    color: gray;
+}</string>
+              </property>
+              <property name="text">
+               <string>~200 km</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_12">
+              <property name="styleSheet">
+               <string notr="true">QLabel {
+    color: gray;
+}</string>
+              </property>
+              <property name="text">
+               <string>~1h 50min</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Policy::Preferred</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>200</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_13">
+              <property name="styleSheet">
+               <string notr="true">QLabel {
+    color: gray;
+}</string>
+              </property>
+              <property name="text">
+               <string>14.2 €</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="travelHistoryPage">
+        <widget class="QLabel" name="travelCostCalculatorLabel_4">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>40</y>
+           <width>431</width>
+           <height>61</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>36</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Travel History</string>
+         </property>
+        </widget>
+        <widget class="QTableWidget" name="tableWidget">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>170</y>
+           <width>641</width>
+           <height>311</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">/* 1. Užapvaliname patį lentelės rėmą */
+QTableWidget {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px; /* Pagrindinis apvalumas */
+    gridline-color: transparent;
+}
+
+/* 2. LABAI SVARBU: Užapvaliname pačią antraščių juostą */
+QHeaderView {
+    background-color: transparent;
+}
+
+/* 3. Štai čia dingsta tie smailūs kampai! */
+/* Mes pasakome, kad pirmas antraštės langelis kairėje ir paskutinis dešinėje turi būti apvalūs */
+QHeaderView::section:horizontal:first {
+    border-top-left-radius: 11px;
+}
+
+QHeaderView::section:horizontal:last {
+    border-top-right-radius: 11px;
+}
+
+/* 4. Sutvarkome pačių antraščių stilių, kad jos neturėtų savo bjaurių rėmelių */
+QHeaderView::section {
+    background-color: #21262d;
+    color: #848d97;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid #30363d;
+}</string>
+         </property>
+         <attribute name="horizontalHeaderDefaultSectionSize">
+          <number>126</number>
+         </attribute>
+         <attribute name="horizontalHeaderHighlightSections">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+          <bool>false</bool>
+         </attribute>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
+         <column>
+          <property name="text">
+           <string>Date</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Route</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>KM</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Fuel</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Price</string>
+          </property>
+         </column>
+        </widget>
+        <widget class="QLabel" name="travelCostCalculatorLabel_5">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>70</y>
+           <width>431</width>
+           <height>61</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>16</pointsize>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+	color: #687c94; 
+}</string>
+         </property>
+         <property name="text">
+          <string>Your previous trips</string>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
