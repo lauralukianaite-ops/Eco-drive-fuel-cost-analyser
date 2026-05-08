@@ -17,6 +17,12 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 
+private slots:
+    void on_saveProfileButton_clicked();
+    void on_dashboardButton_clicked();
+    void on_routeAnalysisButton_clicked();
+    void on_settingsButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
