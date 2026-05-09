@@ -3,6 +3,10 @@
 
 #include <QMainWindow>
 
+#include "vehicleprofile.h"
+#include  "trip.h"
+#include "route.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -22,9 +26,11 @@ private slots:
     void on_dashboardButton_clicked();
     void on_routeAnalysisButton_clicked();
     void on_settingsButton_clicked();
-    void on_calculateButton_clicked();
+     void on_calculateButton_clicked();
 
 private:
     Ui::MainWindow *ui;
+
+    VehicleProfile userProfile;
 };
 #endif // MAINWINDOW_H
