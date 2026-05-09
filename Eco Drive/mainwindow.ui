@@ -149,7 +149,7 @@ QLabel#titleLabel{
           </size>
          </property>
          <property name="text">
-          <string>Travel History</string>
+          <string>Saved Routes</string>
          </property>
         </widget>
        </item>
@@ -338,13 +338,23 @@ QLineEdit {
     color: white;
     padding: 8px;
 }
-QPushButton#saveProfileButton {
+QPushButton#saveProfileButton{
     background-color: #00c896;
     color: black;
     border-radius: 8px;
     font-weight: bold;
     height: 40px;
 }
+
+QPushButton#saveProfileButton:hover  {
+    background-color: #00c896;
+    color: black;
+    border-radius: 8px;
+    font-weight: bold;
+    height: 40px;
+	background-color: rgba(0, 200, 150, 127);
+}
+
 QPushButton#petrolButton, QPushButton#dieselButton{
     background-color: #161b22;
     border: 1px solid #30363d;
@@ -770,12 +780,22 @@ QLineEdit {
     color: white;
     padding: 8px;
 }
+
 QPushButton#calculateButton {
     background-color: #00c896;
     color: black;
     border-radius: 8px;
     font-weight: bold;
     height: 40px;
+}
+
+QPushButton#calculateButton:hover {
+    background-color: #00c896;
+    color: black;
+    border-radius: 8px;
+    font-weight: bold;
+    height: 40px;
+    background-color: rgba(0, 200, 150, 127);
 }</string>
          </property>
          <property name="frameShape">
@@ -1242,12 +1262,22 @@ QLineEdit {
     color: white;
     padding: 8px;
 }
-QPushButton#calculateButton {
+
+QPushButton#saveRouteButton {
     background-color: #00c896;
     color: black;
     border-radius: 8px;
     font-weight: bold;
     height: 40px;
+}
+
+QPushButton#saveRouteButton:hover {
+    background-color: #00c896;
+    color: black;
+    border-radius: 8px;
+    font-weight: bold;
+    height: 40px;
+    background-color: rgba(0, 200, 150, 127);
 }</string>
          </property>
          <property name="frameShape">
@@ -1258,23 +1288,46 @@ QPushButton#calculateButton {
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <widget class="QLabel" name="label_8">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>-1</pointsize>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Available Routes</string>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QLabel" name="label_8">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>-1</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Available Routes</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="saveRouteButton">
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    text-align: center;
+    padding: 5px; 
+}</string>
+              </property>
+              <property name="text">
+               <string>Save Route</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
            <widget class="QFrame" name="frame">
@@ -1289,7 +1342,7 @@ QPushButton#calculateButton {
             <property name="frameShadow">
              <enum>QFrame::Shadow::Raised</enum>
             </property>
-            <widget class="QWidget" name="">
+            <widget class="QWidget" name="layoutWidget">
              <property name="geometry">
               <rect>
                <x>0</x>
