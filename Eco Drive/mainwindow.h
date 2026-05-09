@@ -22,6 +22,7 @@ private slots:
     void on_dashboardButton_clicked();
     void on_routeAnalysisButton_clicked();
     void on_settingsButton_clicked();
+    void on_calculateButton_clicked();
 
 private:
     Ui::MainWindow *ui;

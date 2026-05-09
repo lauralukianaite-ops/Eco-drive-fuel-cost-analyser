@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include "InputValidator.h"
 #include <QButtonGroup>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -14,11 +16,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     fuelGroup->addButton(ui->petrolButton);
     fuelGroup->addButton(ui->dieselButton);
-
-    connect(ui->routeAnalysisButton, &QPushButton::clicked, this, &MainWindow::on_routeAnalysisButton_clicked);
-    connect(ui->dashboardButton, &QPushButton::clicked, this, &MainWindow::on_dashboardButton_clicked);
-    connect(ui->settingsButton, &QPushButton::clicked, this, &MainWindow::on_settingsButton_clicked);
-    connect(ui->saveProfileButton, &QPushButton::clicked, this, &MainWindow::on_saveProfileButton_clicked);
 }
 
 MainWindow::~MainWindow()
@@ -35,15 +32,52 @@ void MainWindow::on_settingsButton_clicked(){
     ui->stackedWidget->setCurrentWidget(ui->settingsPage);
 }
 void MainWindow::on_saveProfileButton_clicked(){
-    QString modelis = ui->carModelLine->text();
-    QString sanaudos = ui->avgCansumptionEnterLine->text();
-    QString kuroTipas = ui->dieselButton->isChecked() ? "Diesel" : "Petrol";
+    QString model = ui->carModelLine->text();
+    QString consumption = ui->avgCansumptionEnterLine->text();
+    QString fuelType = ui->dieselButton->isChecked() ? "Diesel" : "Petrol";
 
-    if(!modelis.isEmpty()){
-        ui->carModelLabel->setText(modelis);
+    if (!ui->petrolButton->isChecked() && !ui->dieselButton->isChecked()) {
+        QMessageBox::warning(this, "Invalid Input", "Please select a fuel type");
+        return;
     }
-    if(!sanaudos.isEmpty()){
-        ui->descriptionLabel->setText(sanaudos + " L/100km " + kuroTipas);
+
+    QString error = InputValidator::validateProfileInputs(consumption, ui->priceLine_2->text());
+    if (!error.isEmpty()) {
+        QMessageBox::warning(this, "Invalid Input", error);
+        return;
     }
-    ui->consumptionLine->setText(sanaudos);
+
+    if(!model.isEmpty()){
+        ui->carModelLabel->setText(model);
+    }
+    if(!consumption.isEmpty()){
+        ui->descriptionLabel->setText(consumption + " L/100km " + fuelType);
+    }
+    ui->consumptionLine->setText(consumption);
+    ui->priceLine->setText(ui->priceLine_2->text());
+}
+
+void MainWindow::on_calculateButton_clicked(){
+    QString error = InputValidator::validateRouteInputs(
+        ui->startLine->text(),
+        ui->destinationLine->text(),
+        ui->priceLine->text(),
+        ui->consumptionLine->text()
+        );
+
+    if (!error.isEmpty()) {
+        QMessageBox::warning(this, "Invalid Input", error);
+        return;
+    }
+
+    double consumption = ui->consumptionLine->text().toDouble();
+    double price = ui->priceLine->text().toDouble();
+    double distance = 180.0;
+
+    double fuelNeeded = (distance / 100.0) * consumption;
+    double totalCost = fuelNeeded * price;
+
+    ui->distanceResult->setText(QString::number(distance, 'f', 0) + " km");
+    ui->distanceResult_2->setText(QString::number(fuelNeeded, 'f', 1) + " L");
+    ui->distanceResult_3->setText(QString::number(totalCost, 'f', 2) + " €");
 }
