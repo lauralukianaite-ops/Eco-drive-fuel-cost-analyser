@@ -3,6 +3,10 @@
 #include "InputValidator.h"
 #include <QButtonGroup>
 #include <QMessageBox>
+#include <QString>
+#include "vehicleprofile.h"
+#include "route.h"
+#include "trip.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -16,6 +20,17 @@ MainWindow::MainWindow(QWidget *parent)
 
     fuelGroup->addButton(ui->petrolButton);
     fuelGroup->addButton(ui->dieselButton);
+
+    if(ui->apperingOnCalculateTripFrame){
+        ui->apperingOnCalculateTripFrame->hide();
+    }
+
+    connect(ui->routeAnalysisButton, &QPushButton::clicked, this, &MainWindow::on_routeAnalysisButton_clicked);
+    connect(ui->dashboardButton, &QPushButton::clicked, this, &MainWindow::on_dashboardButton_clicked);
+    connect(ui->settingsButton, &QPushButton::clicked, this, &MainWindow::on_settingsButton_clicked);
+    connect(ui->saveProfileButton, &QPushButton::clicked, this, &MainWindow::on_saveProfileButton_clicked);
+
+    connect(ui->calculateButton, &QPushButton::clicked, this, &MainWindow::on_calculateButton_clicked);
 }
 
 MainWindow::~MainWindow()
@@ -32,6 +47,7 @@ void MainWindow::on_settingsButton_clicked(){
     ui->stackedWidget->setCurrentWidget(ui->settingsPage);
 }
 void MainWindow::on_saveProfileButton_clicked(){
+
     QString model = ui->carModelLine->text();
     QString consumption = ui->avgCansumptionEnterLine->text();
     QString fuelType = ui->dieselButton->isChecked() ? "Diesel" : "Petrol";
@@ -47,17 +63,21 @@ void MainWindow::on_saveProfileButton_clicked(){
         return;
     }
 
+    userProfile.setModel(model);
+    userProfile.setConsumption(consumption.toDouble());
+    userProfile.setFuelType(fuelType);
+
     if(!model.isEmpty()){
         ui->carModelLabel->setText(model);
     }
-    if(!consumption.isEmpty()){
-        ui->descriptionLabel->setText(consumption + " L/100km " + fuelType);
-    }
-    ui->consumptionLine->setText(consumption);
-    ui->priceLine->setText(ui->priceLine_2->text());
-}
 
+    ui->descriptionLabel->setText(userProfile.getShortSummary());
+
+    ui->consumptionLine->setText(QString::number(consumption.toDouble(), 'f', 1));
+}
 void MainWindow::on_calculateButton_clicked(){
+
+
     QString error = InputValidator::validateRouteInputs(
         ui->startLine->text(),
         ui->destinationLine->text(),
@@ -70,14 +90,21 @@ void MainWindow::on_calculateButton_clicked(){
         return;
     }
 
-    double consumption = ui->consumptionLine->text().toDouble();
-    double price = ui->priceLine->text().toDouble();
-    double distance = 180.0;
+    QString start = ui->startLine->text();
+    QString destination = ui->destinationLine->text();
 
-    double fuelNeeded = (distance / 100.0) * consumption;
-    double totalCost = fuelNeeded * price;
+    Route currentRoute(start, destination);
+
+    double fuelPrice = 1.88;
+    double distance = currentRoute.getDistance();
+
+    VehicleProfile tripProfile = userProfile;
+
+    Trip currentTrip(currentRoute, tripProfile, fuelPrice);
 
     ui->distanceResult->setText(QString::number(distance, 'f', 0) + " km");
-    ui->distanceResult_2->setText(QString::number(fuelNeeded, 'f', 1) + " L");
-    ui->distanceResult_3->setText(QString::number(totalCost, 'f', 2) + " €");
+    ui->distanceResult_2->setText(QString::number(currentTrip.calculateFuelRequired(), 'f', 1) + " L");
+    ui->distanceResult_3->setText(QString::number(currentTrip.calculateTotalPrice(), 'f', 2) + " €");
+
+    ui->apperingOnCalculateTripFrame->show();
 }
