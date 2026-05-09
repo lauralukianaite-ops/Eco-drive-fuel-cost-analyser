@@ -29,6 +29,15 @@ MainWindow::MainWindow(QWidget *parent)
         ui->apperingOnCalculateTripFrame->hide();
     }
 
+    // Pointer cursor for buttons
+    QList<QPushButton*> buttons = {
+        ui->routeAnalysisButton, ui->dashboardButton, ui->settingsButton,
+        ui->saveProfileButton, ui->calculateButton,
+        ui->petrolButton, ui->dieselButton, ui->saveRouteButton, ui->deleteButton
+    };
+    for (auto btn : buttons)
+        btn->setCursor(Qt::PointingHandCursor);
+
     // Table styling
     ui->tableWidget->verticalHeader()->setVisible(false);
     ui->tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
