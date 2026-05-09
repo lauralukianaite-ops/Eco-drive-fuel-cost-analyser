@@ -17,6 +17,14 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
+	InputValidator.cpp
+   	InputValidator.h
+    	route.cpp
+    	route.h   
+    	vehicleprofile.cpp 
+    	vehicleprofile.h   
+    	trip.cpp        
+    	trip.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
