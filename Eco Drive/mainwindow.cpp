@@ -4,9 +4,13 @@
 #include <QButtonGroup>
 #include <QMessageBox>
 #include <QString>
+#include <QDate>
+#include <QHeaderView>
+#include <QTableWidgetItem>
 #include "vehicleprofile.h"
 #include "route.h"
 #include "trip.h"
+#include "savedroutes.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -25,12 +29,32 @@ MainWindow::MainWindow(QWidget *parent)
         ui->apperingOnCalculateTripFrame->hide();
     }
 
-    connect(ui->routeAnalysisButton, &QPushButton::clicked, this, &MainWindow::on_routeAnalysisButton_clicked);
-    connect(ui->dashboardButton, &QPushButton::clicked, this, &MainWindow::on_dashboardButton_clicked);
-    connect(ui->settingsButton, &QPushButton::clicked, this, &MainWindow::on_settingsButton_clicked);
-    connect(ui->saveProfileButton, &QPushButton::clicked, this, &MainWindow::on_saveProfileButton_clicked);
+    // Table styling
+    ui->tableWidget->verticalHeader()->setVisible(false);
+    ui->tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-    connect(ui->calculateButton, &QPushButton::clicked, this, &MainWindow::on_calculateButton_clicked);
+    const auto routes = SavedRoutes::loadAllRoutes();
+    for (const auto &route : routes) {
+        int row = ui->tableWidget->rowCount();
+        ui->tableWidget->insertRow(row);
+
+        auto addItem = [&](int col, const QString &text) {
+            auto *item = new QTableWidgetItem(text);
+            item->setTextAlignment(Qt::AlignCenter);
+            ui->tableWidget->setItem(row, col, item);
+        };
+
+        addItem(0, route.date);
+        addItem(1, route.route);
+        addItem(2, route.distance);
+        addItem(3, route.fuel);
+        addItem(4, route.price);
+    }
+
 }
 
 MainWindow::~MainWindow()
@@ -90,21 +114,96 @@ void MainWindow::on_calculateButton_clicked(){
         return;
     }
 
-    QString start = ui->startLine->text();
-    QString destination = ui->destinationLine->text();
+    Route currentRoute(ui->startLine->text(), ui->destinationLine->text());
 
-    Route currentRoute(start, destination);
+    double consumption = ui->consumptionLine->text().toDouble();
+    double fuelPrice = ui->priceLine->text().toDouble();
 
-    double fuelPrice = 1.88;
-    double distance = currentRoute.getDistance();
-
-    VehicleProfile tripProfile = userProfile;
+    VehicleProfile tripProfile;
+    tripProfile.setConsumption(consumption);
+    tripProfile.setFuelType(ui->dieselButton->isChecked() ? "Diesel" : "Petrol");
 
     Trip currentTrip(currentRoute, tripProfile, fuelPrice);
 
-    ui->distanceResult->setText(QString::number(distance, 'f', 0) + " km");
+    ui->distanceResult->setText(QString::number(currentRoute.getDistance(), 'f', 0) + " km");
     ui->distanceResult_2->setText(QString::number(currentTrip.calculateFuelRequired(), 'f', 1) + " L");
     ui->distanceResult_3->setText(QString::number(currentTrip.calculateTotalPrice(), 'f', 2) + " €");
 
     ui->apperingOnCalculateTripFrame->show();
+}
+
+void MainWindow::on_saveRouteButton_clicked(){
+    if (ui->distanceResult->text() == "--- km") {
+        QMessageBox::warning(this, "No Route", "Please calculate a trip first");
+        return;
+    }
+
+    QString date = QDate::currentDate().toString("yyyy-MM-dd");
+    QString route = ui->startLine->text() + " → " + ui->destinationLine->text();
+    QString distance = ui->distanceResult->text();
+    QString fuel = ui->distanceResult_2->text();
+    QString price = ui->distanceResult_3->text();
+
+    for (int r = 0; r < ui->tableWidget->rowCount(); r++) {
+        QString existingDate = ui->tableWidget->item(r, 0)->text();
+        QString existingRoute = ui->tableWidget->item(r, 1)->text();
+        QString existingDistance = ui->tableWidget->item(r, 2)->text();
+
+        if (existingDate == date && existingRoute == route && existingDistance == distance) {
+            QMessageBox::information(this, "Already Saved", "This route is already in your history");
+            return;
+        }
+    }
+
+    SavedRoute newRoute;
+    newRoute.date = date;
+    newRoute.route = route;
+    newRoute.distance = distance;
+    newRoute.fuel = fuel;
+    newRoute.price = price;
+
+    if (!SavedRoutes::saveRoute(newRoute)) {
+        QMessageBox::warning(this, "Error", "Could not save route");
+        return;
+    }
+
+    int row = 0;
+    ui->tableWidget->insertRow(row);
+
+    auto addItem = [&](int col, const QString &text) {
+        auto *item = new QTableWidgetItem(text);
+        item->setTextAlignment(Qt::AlignCenter);
+        ui->tableWidget->setItem(row, col, item);
+    };
+
+    addItem(0, date);
+    addItem(1, route);
+    addItem(2, distance);
+    addItem(3, fuel);
+    addItem(4, price);
+
+    QMessageBox::information(this, "Saved", "Route saved successfully!");
+}
+
+void MainWindow::on_deleteButton_clicked(){
+    int row = ui->tableWidget->currentRow();
+    if (row < 0) {
+        QMessageBox::warning(this, "No Selection", "Please select a route to delete");
+        return;
+    }
+
+    SavedRoute routeToDelete;
+    routeToDelete.date = ui->tableWidget->item(row, 0)->text();
+    routeToDelete.route = ui->tableWidget->item(row, 1)->text();
+    routeToDelete.distance = ui->tableWidget->item(row, 2)->text();
+
+    if (SavedRoutes::deleteRoute(routeToDelete)) {
+        ui->tableWidget->clearSelection();
+        ui->tableWidget->setCurrentCell(-1, -1);
+        ui->tableWidget->removeRow(row);
+
+        QMessageBox::information(this, "Deleted", "Route removed successfully");
+    } else {
+        QMessageBox::warning(this, "Error", "Could not delete route");
+    }
 }
