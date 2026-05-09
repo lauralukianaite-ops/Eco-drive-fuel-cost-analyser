@@ -11,11 +11,9 @@ public:
 
     static QString validateRouteInputs(const QString &startLocation,
                                        const QString &destLocation,
-                                       const QString &fuelPrice,
                                        const QString &consumption);
 
-    static QString validateProfileInputs(const QString &consumption,
-                                         const QString &fuelPrice);
+    static QString validateProfileInputs(const QString &consumption);
 };
 
 #endif // INPUTVALIDATOR_H

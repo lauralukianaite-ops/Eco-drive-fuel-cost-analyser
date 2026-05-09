@@ -55,6 +55,12 @@ MainWindow::MainWindow(QWidget *parent)
         addItem(4, route.price);
     }
 
+    // Hardcoded fuel price until API is connected
+    const QString fuelPrice = "1.88";
+    ui->priceLine->setText(fuelPrice + " €/L");
+    ui->priceLine_2->setText(fuelPrice + " €/L");
+    ui->priceLine->setReadOnly(true);
+    ui->priceLine_2->setReadOnly(true);
 }
 
 MainWindow::~MainWindow()
@@ -81,7 +87,7 @@ void MainWindow::on_saveProfileButton_clicked(){
         return;
     }
 
-    QString error = InputValidator::validateProfileInputs(consumption, ui->priceLine_2->text());
+    QString error = InputValidator::validateProfileInputs(consumption);
     if (!error.isEmpty()) {
         QMessageBox::warning(this, "Invalid Input", error);
         return;
@@ -105,7 +111,6 @@ void MainWindow::on_calculateButton_clicked(){
     QString error = InputValidator::validateRouteInputs(
         ui->startLine->text(),
         ui->destinationLine->text(),
-        ui->priceLine->text(),
         ui->consumptionLine->text()
         );
 
@@ -117,7 +122,7 @@ void MainWindow::on_calculateButton_clicked(){
     Route currentRoute(ui->startLine->text(), ui->destinationLine->text());
 
     double consumption = ui->consumptionLine->text().toDouble();
-    double fuelPrice = ui->priceLine->text().toDouble();
+    double fuelPrice = 1.88;
 
     VehicleProfile tripProfile;
     tripProfile.setConsumption(consumption);

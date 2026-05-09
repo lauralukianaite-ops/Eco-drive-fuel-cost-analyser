@@ -1,6 +1,5 @@
 #include "savedroutes.h"
 #include <QStandardPaths>
-#include <utility>
 
 QString SavedRoutes::getFilePath() {
     return QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
@@ -32,7 +31,9 @@ bool SavedRoutes::saveRoute(const SavedRoute &newRoute) {
     routes.append(newRoute);
 
     QJsonArray jsonArray;
-    for (const auto &r : std::as_const(routes)) jsonArray.append(routeToJson(r));
+    for (int i = 0; i < routes.size(); ++i) {
+        jsonArray.append(routeToJson(routes[i]));
+    }
 
     QFile file(getFilePath());
     if (!file.open(QIODevice::WriteOnly)) return false;
@@ -51,7 +52,9 @@ bool SavedRoutes::deleteRoute(const SavedRoute &targetRoute) {
             routes.removeAt(i);
 
             QJsonArray jsonArray;
-            for (const auto &r : std::as_const(routes)) jsonArray.append(routeToJson(r));
+            for (int j = 0; j < routes.size(); ++j) {
+                jsonArray.append(routeToJson(routes[j]));
+            }
 
             QFile file(getFilePath());
             if (!file.open(QIODevice::WriteOnly)) return false;

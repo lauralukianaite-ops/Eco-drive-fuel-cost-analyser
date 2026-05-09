@@ -12,21 +12,16 @@ bool InputValidator::isPositiveNumber(const QString &value)
     return ok && number > 0;
 }
 
-QString InputValidator::validateProfileInputs(const QString &consumption,
-                                              const QString &fuelPrice)
+QString InputValidator::validateProfileInputs(const QString &consumption)
 {
     if (!isPositiveNumber(consumption))
         return "Please enter a valid fuel consumption";
-
-    if (!isPositiveNumber(fuelPrice))
-        return "Please enter a valid fuel price";
 
     return "";
 }
 
 QString InputValidator::validateRouteInputs(const QString &startLocation,
                                             const QString &destLocation,
-                                            const QString &fuelPrice,
                                             const QString &consumption)
 {
     if (!isNotEmpty(startLocation))
@@ -34,9 +29,6 @@ QString InputValidator::validateRouteInputs(const QString &startLocation,
 
     if (!isNotEmpty(destLocation))
         return "Please enter your destination";
-
-    if (!isPositiveNumber(fuelPrice))
-        return "Please enter a valid fuel price";
 
     if (!isPositiveNumber(consumption))
         return "Please enter a valid fuel consumption";

@@ -1,9 +1,0 @@
-/Users/kamile/Documents/Uni/2 semestras/Object Oriented Programming C++/TP/Eco-drive-fuel-cost-analyser/Eco Drive/build/Qt_6_11_0_for_macOS-Debug/CMakeFiles/EcoDrive_GUI.dir
-/Users/kamile/Documents/Uni/2 semestras/Object Oriented Programming C++/TP/Eco-drive-fuel-cost-analyser/Eco Drive/build/Qt_6_11_0_for_macOS-Debug/CMakeFiles/edit_cache.dir
-/Users/kamile/Documents/Uni/2 semestras/Object Oriented Programming C++/TP/Eco-drive-fuel-cost-analyser/Eco Drive/build/Qt_6_11_0_for_macOS-Debug/CMakeFiles/rebuild_cache.dir
-/Users/kamile/Documents/Uni/2 semestras/Object Oriented Programming C++/TP/Eco-drive-fuel-cost-analyser/Eco Drive/build/Qt_6_11_0_for_macOS-Debug/CMakeFiles/list_install_components.dir
-/Users/kamile/Documents/Uni/2 semestras/Object Oriented Programming C++/TP/Eco-drive-fuel-cost-analyser/Eco Drive/build/Qt_6_11_0_for_macOS-Debug/CMakeFiles/install.dir
-/Users/kamile/Documents/Uni/2 semestras/Object Oriented Programming C++/TP/Eco-drive-fuel-cost-analyser/Eco Drive/build/Qt_6_11_0_for_macOS-Debug/CMakeFiles/install/local.dir
-/Users/kamile/Documents/Uni/2 semestras/Object Oriented Programming C++/TP/Eco-drive-fuel-cost-analyser/Eco Drive/build/Qt_6_11_0_for_macOS-Debug/CMakeFiles/install/strip.dir
-/Users/kamile/Documents/Uni/2 semestras/Object Oriented Programming C++/TP/Eco-drive-fuel-cost-analyser/Eco Drive/build/Qt_6_11_0_for_macOS-Debug/CMakeFiles/EcoDrive_GUI_autogen_timestamp_deps.dir
-/Users/kamile/Documents/Uni/2 semestras/Object Oriented Programming C++/TP/Eco-drive-fuel-cost-analyser/Eco Drive/build/Qt_6_11_0_for_macOS-Debug/CMakeFiles/EcoDrive_GUI_autogen.dir
