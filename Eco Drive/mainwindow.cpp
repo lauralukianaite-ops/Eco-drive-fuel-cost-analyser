@@ -7,6 +7,7 @@
 #include <QDate>
 #include <QHeaderView>
 #include <QTableWidgetItem>
+#include <QKeyEvent>
 #include "vehicleprofile.h"
 #include "route.h"
 #include "trip.h"
@@ -219,5 +220,32 @@ void MainWindow::on_deleteButton_clicked(){
         QMessageBox::information(this, "Deleted", "Route removed successfully");
     } else {
         QMessageBox::warning(this, "Error", "Could not delete route");
+    }
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event) {
+    // If ESC is pressed, clear table selection
+    if (event->key() == Qt::Key_Escape) {
+        ui->tableWidget->clearSelection();
+        ui->tableWidget->setCurrentCell(-1, -1);
+        event->accept();
+        return;
+    }
+    QMainWindow::keyPressEvent(event);
+}
+
+void MainWindow::on_tableWidget_itemClicked(QTableWidgetItem *item) {
+    if (!item) return;
+
+    int clickedRow = item->row();
+
+    // When clicked on selected row, clear selection
+    if (clickedRow == m_lastSelectedRow) {
+        ui->tableWidget->clearSelection();
+        ui->tableWidget->setCurrentCell(-1, -1);
+        m_lastSelectedRow = -1;
+    }
+    else {
+        m_lastSelectedRow = clickedRow;
     }
 }

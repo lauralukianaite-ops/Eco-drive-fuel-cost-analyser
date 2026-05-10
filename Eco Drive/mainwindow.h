@@ -7,6 +7,8 @@
 #include  "trip.h"
 #include "route.h"
 
+class QTableWidgetItem;
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -29,10 +31,16 @@ private slots:
     void on_calculateButton_clicked();
     void on_saveRouteButton_clicked();
     void on_deleteButton_clicked();
+    void on_tableWidget_itemClicked(QTableWidgetItem *item);
 
 private:
     Ui::MainWindow *ui;
 
     VehicleProfile userProfile;
+
+    int m_lastSelectedRow = -1;
+
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
 };
 #endif // MAINWINDOW_H
