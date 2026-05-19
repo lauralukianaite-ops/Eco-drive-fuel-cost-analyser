@@ -21,17 +21,13 @@ QString InputValidator::validateProfileInputs(const QString &consumption)
 }
 
 QString InputValidator::validateRouteInputs(const QString &startLocation,
-                                            const QString &destLocation,
-                                            const QString &consumption)
+                                            const QString &destLocation)
 {
     if (!isNotEmpty(startLocation))
         return "Please enter your starting location";
 
     if (!isNotEmpty(destLocation))
         return "Please enter your destination";
-
-    if (!isPositiveNumber(consumption))
-        return "Please enter a valid fuel consumption";
 
     return "";
 }

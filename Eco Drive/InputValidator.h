@@ -10,8 +10,7 @@ public:
     static bool isPositiveNumber(const QString &value);
 
     static QString validateRouteInputs(const QString &startLocation,
-                                       const QString &destLocation,
-                                       const QString &consumption);
+                                       const QString &destLocation);
 
     static QString validateProfileInputs(const QString &consumption);
 };
