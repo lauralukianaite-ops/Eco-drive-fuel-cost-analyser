@@ -258,3 +258,15 @@ void MainWindow::on_tableWidget_itemClicked(QTableWidgetItem *item) {
         m_lastSelectedRow = clickedRow;
     }
 }
+
+void MainWindow::on_petrolButton_clicked(){
+    ui->currentFuelPriceAPILabel->setText("Current petrol price (API)");
+
+    ui->currentPriceAPILabel->setText("1.74 €/L");
+}
+
+void MainWindow::on_dieselButton_clicked(){
+    ui->currentFuelPriceAPILabel->setText("Current diesel price (API)");
+
+    ui->currentPriceAPILabel->setText("1.88 €/L");
+}

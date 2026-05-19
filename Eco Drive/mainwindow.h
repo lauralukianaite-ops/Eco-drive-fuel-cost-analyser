@@ -32,6 +32,8 @@ private slots:
     void on_saveRouteButton_clicked();
     void on_deleteButton_clicked();
     void on_tableWidget_itemClicked(QTableWidgetItem *item);
+    void on_petrolButton_clicked();
+    void on_dieselButton_clicked();
 
 private:
     Ui::MainWindow *ui;

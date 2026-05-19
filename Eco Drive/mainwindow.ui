@@ -672,7 +672,7 @@ QPushButton#saveProfileButton {
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_8">
             <item>
-             <widget class="QLabel" name="label_4">
+             <widget class="QLabel" name="currentFuelPriceAPILabel">
               <property name="text">
                <string>Current diesel price (API)</string>
               </property>
