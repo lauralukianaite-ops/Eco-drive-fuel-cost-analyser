@@ -23,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->petrolButton->setCheckable(true);
     ui->dieselButton->setCheckable(true);
 
+    ui->dieselButton->setChecked(true);
+
     fuelGroup->addButton(ui->petrolButton);
     fuelGroup->addButton(ui->dieselButton);
 

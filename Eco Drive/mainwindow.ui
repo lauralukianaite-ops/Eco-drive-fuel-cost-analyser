@@ -568,7 +568,7 @@ QPushButton#dieselButton:checked {
            <x>410</x>
            <y>170</y>
            <width>300</width>
-           <height>281</height>
+           <height>331</height>
           </rect>
          </property>
          <property name="minimumSize">
@@ -612,33 +612,68 @@ QPushButton#saveProfileButton {
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <property name="spacing">
-           <number>7</number>
+           <number>13</number>
           </property>
           <property name="topMargin">
-           <number>21</number>
+           <number>31</number>
           </property>
           <property name="bottomMargin">
            <number>21</number>
           </property>
           <item>
-           <widget class="QLabel" name="fuelPriceTitleLabel">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Fuel Price Source</string>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QLabel" name="fuelPriceTitleLabel">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Fuel Price Source</string>
+              </property>
+              <property name="margin">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="refreshButton">
+              <property name="maximumSize">
+               <size>
+                <width>30</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>18</pointsize>
+                <italic>false</italic>
+                <bold>true</bold>
+                <underline>false</underline>
+                <strikeout>false</strikeout>
+               </font>
+              </property>
+              <property name="text">
+               <string>↻</string>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_8">
             <item>
              <widget class="QLabel" name="label_4">
               <property name="text">
-               <string>Current price (API)</string>
+               <string>Current diesel price (API)</string>
               </property>
              </widget>
             </item>
@@ -686,6 +721,12 @@ QPushButton#saveProfileButton {
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item>
              <widget class="QLabel" name="sourceLabel">
               <property name="text">
@@ -706,6 +747,13 @@ QPushButton#saveProfileButton {
              </widget>
             </item>
            </layout>
+          </item>
+          <item>
+           <widget class="Line" name="line_2">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QLabel" name="label_3">
