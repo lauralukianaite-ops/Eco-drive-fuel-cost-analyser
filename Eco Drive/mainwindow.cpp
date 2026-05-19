@@ -20,6 +20,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     QButtonGroup *fuelGroup = new  QButtonGroup(this);
 
+    ui->carModelLabel->setText("");
+    ui->descriptionLabel->setText("");
+
     ui->petrolButton->setCheckable(true);
     ui->dieselButton->setCheckable(true);
 
@@ -93,6 +96,10 @@ void MainWindow::on_saveProfileButton_clicked(){
     QString model = ui->carModelLine->text();
     QString consumption = ui->avgCansumptionEnterLine->text();
     QString fuelType = ui->dieselButton->isChecked() ? "Diesel" : "Petrol";
+
+    if(model.isEmpty()) {
+        model = "My Car";
+    }
 
     if (!ui->petrolButton->isChecked() && !ui->dieselButton->isChecked()) {
         QMessageBox::warning(this, "Invalid Input", "Please select a fuel type");

@@ -221,7 +221,8 @@ QLabel#titleLabel{
              </property>
              <property name="font">
               <font>
-               <bold>true</bold>
+               <pointsize>20</pointsize>
+               <bold>false</bold>
               </font>
              </property>
              <property name="styleSheet">
@@ -232,7 +233,7 @@ QLabel#titleLabel{
 }</string>
              </property>
              <property name="text">
-              <string/>
+              <string>  ED</string>
              </property>
             </widget>
            </item>
