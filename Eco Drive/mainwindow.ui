@@ -435,7 +435,7 @@ QPushButton#dieselButton:checked {
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="priceLine_2">
+           <widget class="QLineEdit" name="fuelPriceProfileLine">
             <property name="maximumSize">
              <size>
               <width>16777215</width>
@@ -680,6 +680,12 @@ QPushButton#saveProfileButton {
             </item>
             <item alignment="Qt::AlignmentFlag::AlignRight">
              <widget class="QLabel" name="currentPriceAPILabel">
+              <property name="maximumSize">
+               <size>
+                <width>40058</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="font">
                <font>
                 <bold>true</bold>
@@ -691,7 +697,28 @@ QPushButton#saveProfileButton {
 }</string>
               </property>
               <property name="text">
-               <string>1.88 €/L</string>
+               <string>1.88</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_4">
+              <property name="maximumSize">
+               <size>
+                <width>20</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLabel {
+	color: #00c896;
+}</string>
+              </property>
+              <property name="text">
+               <string>€/L</string>
               </property>
              </widget>
             </item>

@@ -31,6 +31,8 @@ MainWindow::MainWindow(QWidget *parent)
     fuelGroup->addButton(ui->petrolButton);
     fuelGroup->addButton(ui->dieselButton);
 
+    ui->availableRoutesCard->setVisible(false);
+
     if(ui->apperingOnCalculateTripFrame){
         ui->apperingOnCalculateTripFrame->hide();
     }
@@ -71,11 +73,11 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     // Hardcoded fuel price until API is connected
-    const QString fuelPrice = "1.88";
+    QString fuelPrice = ui->currentPriceAPILabel->text();
     ui->priceLine->setText(fuelPrice + " €/L");
-    ui->priceLine_2->setText(fuelPrice + " €/L");
+    ui->fuelPriceProfileLine->setText(fuelPrice + " €/L");
     ui->priceLine->setReadOnly(true);
-    ui->priceLine_2->setReadOnly(true);
+    ui->fuelPriceProfileLine->setReadOnly(true);
 }
 
 MainWindow::~MainWindow()
@@ -122,21 +124,23 @@ void MainWindow::on_saveProfileButton_clicked(){
 
     ui->descriptionLabel->setText(userProfile.getShortSummary());
 
-    ui->consumptionLine->setText(QString::number(consumption.toDouble(), 'f', 1));
+    ui->consumptionLine->setText(QString::number(consumption.toDouble(), 'f', 1) + " L/100km");
+    ui->consumptionLine->setReadOnly(true);
 }
 void MainWindow::on_calculateButton_clicked(){
 
 
     QString error = InputValidator::validateRouteInputs(
         ui->startLine->text(),
-        ui->destinationLine->text(),
-        ui->consumptionLine->text()
+        ui->destinationLine->text()
         );
 
     if (!error.isEmpty()) {
         QMessageBox::warning(this, "Invalid Input", error);
         return;
     }
+
+    ui->availableRoutesCard->setVisible(true);
 
     Route currentRoute(ui->startLine->text(), ui->destinationLine->text());
 
@@ -262,11 +266,22 @@ void MainWindow::on_tableWidget_itemClicked(QTableWidgetItem *item) {
 void MainWindow::on_petrolButton_clicked(){
     ui->currentFuelPriceAPILabel->setText("Current petrol price (API)");
 
-    ui->currentPriceAPILabel->setText("1.74 €/L");
+    ui->currentPriceAPILabel->setText("1.74");
+    QString fuelPrice = ui->currentPriceAPILabel->text();
+    ui->priceLine->setText(fuelPrice + " €/L");
+    ui->fuelPriceProfileLine->setText(fuelPrice + " €/L");
+    ui->priceLine->setReadOnly(true);
+    ui->fuelPriceProfileLine->setReadOnly(true);
+
 }
 
 void MainWindow::on_dieselButton_clicked(){
     ui->currentFuelPriceAPILabel->setText("Current diesel price (API)");
 
-    ui->currentPriceAPILabel->setText("1.88 €/L");
+    ui->currentPriceAPILabel->setText("1.88");
+    QString fuelPrice = ui->currentPriceAPILabel->text();
+    ui->priceLine->setText(fuelPrice + " €/L");
+    ui->fuelPriceProfileLine->setText(fuelPrice + " €/L");
+    ui->priceLine->setReadOnly(true);
+    ui->fuelPriceProfileLine->setReadOnly(true);
 }
