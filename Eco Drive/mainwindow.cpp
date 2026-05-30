@@ -12,20 +12,22 @@
 #include "route.h"
 #include "trip.h"
 #include "savedroutes.h"
+#include "apimanager.h"
+#include "distanceapi.h"
+#include "fuelpriceapi.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QButtonGroup *fuelGroup = new  QButtonGroup(this);
+    QButtonGroup *fuelGroup = new QButtonGroup(this);
 
     ui->carModelLabel->setText("");
     ui->descriptionLabel->setText("");
 
     ui->petrolButton->setCheckable(true);
     ui->dieselButton->setCheckable(true);
-
     ui->dieselButton->setChecked(true);
 
     fuelGroup->addButton(ui->petrolButton);
@@ -37,7 +39,6 @@ MainWindow::MainWindow(QWidget *parent)
         ui->apperingOnCalculateTripFrame->hide();
     }
 
-    // Pointer cursor for buttons
     QList<QPushButton*> buttons = {
         ui->routeAnalysisButton, ui->dashboardButton, ui->settingsButton,
         ui->saveProfileButton, ui->calculateButton,
@@ -46,7 +47,6 @@ MainWindow::MainWindow(QWidget *parent)
     for (auto btn : buttons)
         btn->setCursor(Qt::PointingHandCursor);
 
-    // Table styling
     ui->tableWidget->verticalHeader()->setVisible(false);
     ui->tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -72,7 +72,7 @@ MainWindow::MainWindow(QWidget *parent)
         addItem(4, route.price);
     }
 
-    // Hardcoded fuel price until API is connected
+    ui->currentPriceAPILabel->setText("1.88");
     QString fuelPrice = ui->currentPriceAPILabel->text();
     ui->priceLine->setText(fuelPrice + " €/L");
     ui->fuelPriceProfileLine->setText(fuelPrice + " €/L");
@@ -84,17 +84,20 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
 void MainWindow::on_routeAnalysisButton_clicked(){
     ui->stackedWidget->setCurrentWidget(ui->RouteAnalysisPage);
 }
+
 void MainWindow::on_dashboardButton_clicked(){
     ui->stackedWidget->setCurrentWidget(ui->travelHistoryPage);
 }
+
 void MainWindow::on_settingsButton_clicked(){
     ui->stackedWidget->setCurrentWidget(ui->settingsPage);
 }
-void MainWindow::on_saveProfileButton_clicked(){
 
+void MainWindow::on_saveProfileButton_clicked(){
     QString model = ui->carModelLine->text();
     QString consumption = ui->avgCansumptionEnterLine->text();
     QString fuelType = ui->dieselButton->isChecked() ? "Diesel" : "Petrol";
@@ -127,75 +130,106 @@ void MainWindow::on_saveProfileButton_clicked(){
     ui->consumptionLine->setText(QString::number(consumption.toDouble(), 'f', 1) + " L/100km");
     ui->consumptionLine->setReadOnly(true);
 }
-void MainWindow::on_calculateButton_clicked(){
 
+void MainWindow::on_calculateButton_clicked()
+{
+    QString start = ui->startLine->text().trimmed();
+    QString dest = ui->destinationLine->text().trimmed();
 
-    QString error = InputValidator::validateRouteInputs(
-        ui->startLine->text(),
-        ui->destinationLine->text()
-        );
+    QString consText = ui->avgCansumptionEnterLine->text().trimmed();
 
-    if (!error.isEmpty()) {
-        QMessageBox::warning(this, "Invalid Input", error);
+    QString validationMsg = InputValidator::validateRouteInputs(start, dest);
+    if (!validationMsg.isEmpty()) {
+        QMessageBox::warning(this, "Validation error", validationMsg);
         return;
     }
 
-    ui->availableRoutesCard->setVisible(true);
+    if (consText.isEmpty() || !InputValidator::isPositiveNumber(consText)) {
+        QMessageBox::warning(this, "Validation error", "Please enter correct fuel consumption.");
+        return;
+    }
 
-    Route currentRoute(ui->startLine->text(), ui->destinationLine->text());
+    userProfile.setConsumption(consText.toDouble());
+    userProfile.setFuelType(ui->petrolButton->isChecked() ? "Petrol" : "Diesel");
 
-    double consumption = ui->consumptionLine->text().toDouble();
-    double fuelPrice = 1.88;
+    Route route(start, dest);
+    Trip *currentTrip = new Trip(route, userProfile, this);
 
-    VehicleProfile tripProfile;
-    tripProfile.setConsumption(consumption);
-    tripProfile.setFuelType(ui->dieselButton->isChecked() ? "Diesel" : "Petrol");
+    ui->calculateButton->setEnabled(false);
 
-    Trip currentTrip(currentRoute, tripProfile, fuelPrice);
+    connect(currentTrip, &Trip::calculationFinished, this, [this, currentTrip]() {
+        QVector<RouteOption> routes = currentTrip->getRoutes();
 
-    ui->distanceResult->setText(QString::number(currentRoute.getDistance(), 'f', 0) + " km");
-    ui->distanceResult_2->setText(QString::number(currentTrip.calculateFuelRequired(), 'f', 1) + " L");
-    ui->distanceResult_3->setText(QString::number(currentTrip.calculateTotalPrice(), 'f', 2) + " €");
+        RouteOption cheapest    = routes.value(0);
+        RouteOption alternative = routes.value(1, cheapest);
 
-    ui->apperingOnCalculateTripFrame->show();
+        ui->distanceResult->setText(
+            QString::number(cheapest.distanceKm, 'f', 1) + " km");
+        ui->distanceResult_2->setText(
+            QString::number((cheapest.distanceKm / 100.0) * userProfile.getConsumption(), 'f', 2) + " L");
+        ui->distanceResult_3->setText(
+            QString::number(cheapest.fuelCost, 'f', 2) + " €");
+
+        auto fmtTime = [](int mins) -> QString {
+            if (mins < 60) return QString("~%1 min").arg(mins);
+            return QString("~%1h %2min").arg(mins / 60).arg(mins % 60);
+        };
+
+        ui->cheapestKmLabel->setText(
+            QString("~%1 km").arg(cheapest.distanceKm, 0, 'f', 0));
+        ui->cheapestTimeLabel->setText(fmtTime(cheapest.durationMinutes));
+        ui->label_14->setText(
+            QString::number(cheapest.fuelCost, 'f', 2) + " €");
+
+        ui->label_11->setText(
+            QString("~%1 km").arg(alternative.distanceKm, 0, 'f', 0));
+        ui->label_12->setText(fmtTime(alternative.durationMinutes));
+        ui->label_13->setText(
+            QString::number(alternative.fuelCost, 'f', 2) + " €");
+
+        ui->apperingOnCalculateTripFrame->show();
+        ui->availableRoutesCard->setVisible(true);
+
+        ui->calculateButton->setEnabled(true);
+        ui->calculateButton->setText("Calculate Trip");
+        currentTrip->deleteLater();
+    });
+
+    connect(currentTrip, &Trip::calculationError, this, [this, currentTrip](const QString &error) {
+        QMessageBox::critical(this, "Error", "Failed to retrieve API data: " + error);
+        ui->calculateButton->setEnabled(true);
+        ui->calculateButton->setText("Calculate Trip");
+        currentTrip->deleteLater();
+    });
+
+    currentTrip->startCalculation();
 }
+void MainWindow::on_saveRouteButton_clicked() {
+    QString distanceText = ui->distanceResult  ? ui->distanceResult->text()   : "";
+    QString fuelText     = ui->distanceResult_2 ? ui->distanceResult_2->text() : "";
+    QString priceText    = ui->distanceResult_3 ? ui->distanceResult_3->text() : "";
 
-void MainWindow::on_saveRouteButton_clicked(){
-    if (ui->distanceResult->text() == "--- km") {
-        QMessageBox::warning(this, "No Route", "Please calculate a trip first");
+    if (distanceText.isEmpty() || distanceText == "--- km") {
+        QMessageBox::warning(this, "No Results", "Please calculate a trip before saving.");
         return;
     }
 
-    QString date = QDate::currentDate().toString("yyyy-MM-dd");
-    QString route = ui->startLine->text() + " → " + ui->destinationLine->text();
-    QString distance = ui->distanceResult->text();
-    QString fuel = ui->distanceResult_2->text();
-    QString price = ui->distanceResult_3->text();
+    QString start = ui->startLine->text().trimmed();
+    QString dest  = ui->destinationLine->text().trimmed();
 
-    for (int r = 0; r < ui->tableWidget->rowCount(); r++) {
-        QString existingDate = ui->tableWidget->item(r, 0)->text();
-        QString existingRoute = ui->tableWidget->item(r, 1)->text();
-        QString existingDistance = ui->tableWidget->item(r, 2)->text();
+    SavedRoute entry;
+    entry.date     = QDate::currentDate().toString("yyyy-MM-dd");
+    entry.route    = start + " → " + dest;
+    entry.distance = distanceText;
+    entry.fuel     = fuelText;
+    entry.price    = priceText;
 
-        if (existingDate == date && existingRoute == route && existingDistance == distance) {
-            QMessageBox::information(this, "Already Saved", "This route is already in your history");
-            return;
-        }
-    }
-
-    SavedRoute newRoute;
-    newRoute.date = date;
-    newRoute.route = route;
-    newRoute.distance = distance;
-    newRoute.fuel = fuel;
-    newRoute.price = price;
-
-    if (!SavedRoutes::saveRoute(newRoute)) {
-        QMessageBox::warning(this, "Error", "Could not save route");
+    if (!SavedRoutes::saveRoute(entry)) {
+        QMessageBox::warning(this, "Error", "Could not save the route.");
         return;
     }
 
-    int row = 0;
+    int row = ui->tableWidget->rowCount();
     ui->tableWidget->insertRow(row);
 
     auto addItem = [&](int col, const QString &text) {
@@ -204,13 +238,13 @@ void MainWindow::on_saveRouteButton_clicked(){
         ui->tableWidget->setItem(row, col, item);
     };
 
-    addItem(0, date);
-    addItem(1, route);
-    addItem(2, distance);
-    addItem(3, fuel);
-    addItem(4, price);
+    addItem(0, entry.date);
+    addItem(1, entry.route);
+    addItem(2, entry.distance);
+    addItem(3, entry.fuel);
+    addItem(4, entry.price);
 
-    QMessageBox::information(this, "Saved", "Route saved successfully!");
+    QMessageBox::information(this, "Saved", "Route saved successfully.");
 }
 
 void MainWindow::on_deleteButton_clicked(){
@@ -237,7 +271,6 @@ void MainWindow::on_deleteButton_clicked(){
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
-    // If ESC is pressed, clear table selection
     if (event->key() == Qt::Key_Escape) {
         ui->tableWidget->clearSelection();
         ui->tableWidget->setCurrentCell(-1, -1);
@@ -252,7 +285,6 @@ void MainWindow::on_tableWidget_itemClicked(QTableWidgetItem *item) {
 
     int clickedRow = item->row();
 
-    // When clicked on selected row, clear selection
     if (clickedRow == m_lastSelectedRow) {
         ui->tableWidget->clearSelection();
         ui->tableWidget->setCurrentCell(-1, -1);
@@ -265,19 +297,16 @@ void MainWindow::on_tableWidget_itemClicked(QTableWidgetItem *item) {
 
 void MainWindow::on_petrolButton_clicked(){
     ui->currentFuelPriceAPILabel->setText("Current petrol price (API)");
-
     ui->currentPriceAPILabel->setText("1.74");
     QString fuelPrice = ui->currentPriceAPILabel->text();
     ui->priceLine->setText(fuelPrice + " €/L");
     ui->fuelPriceProfileLine->setText(fuelPrice + " €/L");
     ui->priceLine->setReadOnly(true);
     ui->fuelPriceProfileLine->setReadOnly(true);
-
 }
 
 void MainWindow::on_dieselButton_clicked(){
     ui->currentFuelPriceAPILabel->setText("Current diesel price (API)");
-
     ui->currentPriceAPILabel->setText("1.88");
     QString fuelPrice = ui->currentPriceAPILabel->text();
     ui->priceLine->setText(fuelPrice + " €/L");
