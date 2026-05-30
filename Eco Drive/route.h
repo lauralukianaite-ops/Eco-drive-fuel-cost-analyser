@@ -10,6 +10,8 @@ public:
 
     double getDistance() const;
     int getTravelTimeMinutes() const;
+    QString getStartLocation() const { return infStart; }
+    QString getDestLocation() const { return infDestination; }
 
 private:
     QString infStart;
