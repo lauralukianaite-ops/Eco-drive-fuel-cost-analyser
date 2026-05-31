@@ -16,10 +16,17 @@ static void applySslFix(QNetworkRequest &request) {
     sslConfig.setPeerVerifyMode(QSslSocket::VerifyNone);
     request.setSslConfiguration(sslConfig);
 }
+void APIManager::makeGetRequest(const QString &urlString){
+    makeGetRequest(urlString, {});
+}
 
-void APIManager::makeGetRequest(const QString &urlString) {
+void APIManager::makeGetRequest(const QString &urlString,
+                                const QMap<QString, QString> &headers) {
     QNetworkRequest request((QUrl(urlString)));
     request.setHeader(QNetworkRequest::UserAgentHeader, "EcoDriveApp/1.0");
+    for (auto it = headers.constBegin(); it != headers.constEnd(); ++it) {
+        request.setRawHeader(it.key().toUtf8(), it.value().toUtf8());
+    }
     applySslFix(request);
     m_networkManager->get(request);
 }

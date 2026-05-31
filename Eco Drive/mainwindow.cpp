@@ -72,12 +72,31 @@ MainWindow::MainWindow(QWidget *parent)
         addItem(4, route.price);
     }
 
-    ui->currentPriceAPILabel->setText("1.88");
-    QString fuelPrice = ui->currentPriceAPILabel->text();
-    ui->priceLine->setText(fuelPrice + " €/L");
-    ui->fuelPriceProfileLine->setText(fuelPrice + " €/L");
     ui->priceLine->setReadOnly(true);
     ui->fuelPriceProfileLine->setReadOnly(true);
+
+    m_fuelPriceApi = new FuelPriceAPI(this);
+
+    connect(m_fuelPriceApi, &FuelPriceAPI::fuelPriceFetched,
+            this, [this](double price) {
+                if (m_pendingFuelType == "Petrol") {
+                    m_petrolPrice = price;
+                } else {
+                    m_dieselPrice = price;
+                }
+
+                updateFuelPriceDisplay(m_pendingFuelType, price);
+            });
+
+    connect(m_fuelPriceApi, &APIManager::errorOccurred,
+            this, [this](const QString &errorStr) {
+                QMessageBox::warning(this, "Fuel Price API Error", errorStr);
+                ui->currentPriceAPILabel->setText("Unavailable");
+                ui->priceLine->clear();
+                ui->fuelPriceProfileLine->clear();
+            });
+
+    requestFuelPrice("Diesel");
 }
 
 MainWindow::~MainWindow()
@@ -295,22 +314,54 @@ void MainWindow::on_tableWidget_itemClicked(QTableWidgetItem *item) {
     }
 }
 
-void MainWindow::on_petrolButton_clicked(){
-    ui->currentFuelPriceAPILabel->setText("Current petrol price (API)");
-    ui->currentPriceAPILabel->setText("1.74");
-    QString fuelPrice = ui->currentPriceAPILabel->text();
-    ui->priceLine->setText(fuelPrice + " €/L");
-    ui->fuelPriceProfileLine->setText(fuelPrice + " €/L");
-    ui->priceLine->setReadOnly(true);
-    ui->fuelPriceProfileLine->setReadOnly(true);
+void MainWindow::on_petrolButton_clicked()
+{
+    requestFuelPrice("Petrol");
 }
 
-void MainWindow::on_dieselButton_clicked(){
-    ui->currentFuelPriceAPILabel->setText("Current diesel price (API)");
-    ui->currentPriceAPILabel->setText("1.88");
-    QString fuelPrice = ui->currentPriceAPILabel->text();
+void MainWindow::on_dieselButton_clicked()
+{
+    requestFuelPrice("Diesel");
+}
+
+void MainWindow::on_refreshButton_clicked()
+{
+    const QString fuelType = ui->petrolButton->isChecked() ? "Petrol" : "Diesel";
+    requestFuelPrice(fuelType, true);
+}
+
+void MainWindow::requestFuelPrice(const QString &fuelType, bool forceRefresh)
+{
+    const bool isPetrol = fuelType == "Petrol";
+    const double cachedPrice = isPetrol ? m_petrolPrice : m_dieselPrice;
+
+    if (!forceRefresh && cachedPrice > 0.0) {
+        updateFuelPriceDisplay(fuelType, cachedPrice);
+        return;
+    }
+
+    m_pendingFuelType = fuelType;
+
+    ui->currentFuelPriceAPILabel->setText(
+        QString("Current %1 price (API)").arg(fuelType.toLower())
+        );
+
+    ui->currentPriceAPILabel->setText("Loading...");
+    ui->priceLine->setText("Loading...");
+    ui->fuelPriceProfileLine->setText("Loading...");
+
+    m_fuelPriceApi->fetchFuelPrice(fuelType);
+}
+
+void MainWindow::updateFuelPriceDisplay(const QString &fuelType, double price)
+{
+    QString fuelPrice = QString::number(price, 'f', 4);
+
+    ui->currentFuelPriceAPILabel->setText(
+        QString("Current %1 price (API)").arg(fuelType.toLower())
+        );
+
+    ui->currentPriceAPILabel->setText(fuelPrice);
     ui->priceLine->setText(fuelPrice + " €/L");
     ui->fuelPriceProfileLine->setText(fuelPrice + " €/L");
-    ui->priceLine->setReadOnly(true);
-    ui->fuelPriceProfileLine->setReadOnly(true);
 }

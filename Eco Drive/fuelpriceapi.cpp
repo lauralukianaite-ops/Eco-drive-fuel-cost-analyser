@@ -1,9 +1,12 @@
 #include "fuelpriceapi.h"
+#include "config.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonArray>
-#include <QTimer>
+#include <QJsonParseError>
+#include <QMap>
+#include <QUrl>
+#include <QUrlQuery>
 
 FuelPriceAPI::FuelPriceAPI(QObject *parent)
     : APIManager(parent)
@@ -16,72 +19,110 @@ void FuelPriceAPI::fetchFuelPrice(const QString &fuelType)
 {
     m_currentFuelType = fuelType.trimmed().toLower();
 
-    /*
-     * For now this project uses fallback values instead of a real fuel price API,
-     * because the real API endpoint/key can be added later without changing Trip.
-     */
-    double price = getFallbackPrice(m_currentFuelType);
+    const QString oilPriceCode = getOilPriceCode(m_currentFuelType);
 
-    if (price <= 0.0) {
-        emit errorOccurred("Could not determine fuel price.");
+    if (oilPriceCode.isEmpty()) {
+        emit errorOccurred("Unsupported fuel type.");
         return;
     }
 
-    QTimer::singleShot(0, this, [this, price]() {
-        emit fuelPriceFetched(price);
-    });
+    QUrl url("https://api.oilpriceapi.com/v1/prices/latest");
 
-    /*
-     * Later, if a real endpoint is used, this method should look more like:
-     *
-     * QString url = QString("https://some-fuel-api.example/prices?fuel=%1")
-     *                   .arg(m_currentFuelType);
-     * makeGetRequest(url);
-     *
-     * Then handleResponse() would parse the JSON response.
-     */
+    QUrlQuery query;
+    query.addQueryItem("by_code", oilPriceCode);
+    url.setQuery(query);
+
+    QMap<QString, QString> headers;
+    headers.insert("Authorization", QString("Token %1").arg(OILPRICE_API_KEY));
+    headers.insert("Accept", "application/json");
+
+    makeGetRequest(url.toString(), headers);
 }
 
 void FuelPriceAPI::handleResponse(const QByteArray &data)
 {
-    QJsonDocument doc = QJsonDocument::fromJson(data);
+    QJsonParseError parseError;
+    const QJsonDocument doc = QJsonDocument::fromJson(data, &parseError);
 
-    if (doc.isNull() || !doc.isObject()) {
-        emit errorOccurred("Invalid response from Fuel Price API.");
+    if (parseError.error != QJsonParseError::NoError || !doc.isObject()) {
+        const double fallbackPrice = getFallbackPrice(m_currentFuelType);
+
+        if (fallbackPrice > 0.0) {
+            emit fuelPriceFetched(fallbackPrice);
+            return;
+        }
+
+        emit errorOccurred("Invalid response from OilPriceAPI.");
         return;
     }
 
-    QJsonObject root = doc.object();
+    const QJsonObject root = doc.object();
 
-    if (root.contains("error")) {
-        emit errorOccurred("Fuel Price API error.");
+    if (root.value("status").toString() != "success") {
+        const double fallbackPrice = getFallbackPrice(m_currentFuelType);
+
+        if (fallbackPrice > 0.0) {
+            emit fuelPriceFetched(fallbackPrice);
+            return;
+        }
+
+        emit errorOccurred("OilPriceAPI returned an error.");
         return;
     }
 
-    /*
-     * Placeholder parsing logic.
-     * This can be adjusted when the real fuel price API response format is known.
-     */
-    double price = root["price"].toDouble();
+    const QJsonObject dataObject = root.value("data").toObject();
+    const double price = dataObject.value("price").toDouble();
 
     if (price <= 0.0) {
-        emit errorOccurred("Fuel price was not found in API response.");
+        const double fallbackPrice = getFallbackPrice(m_currentFuelType);
+
+        if (fallbackPrice > 0.0) {
+            emit fuelPriceFetched(fallbackPrice);
+            return;
+        }
+
+        emit errorOccurred("Fuel price was not found in OilPriceAPI response.");
         return;
     }
 
     emit fuelPriceFetched(price);
 }
 
-double FuelPriceAPI::getFallbackPrice(const QString &fuelType) const
+QString FuelPriceAPI::getOilPriceCode(const QString &fuelType) const
 {
-    QString normalizedFuelType = fuelType.trimmed().toLower();
+    const QString normalizedFuelType = fuelType.trimmed().toLower();
 
-    if (normalizedFuelType == "petrol") {
-        return 1.74;
+    if (normalizedFuelType == "petrol" ||
+        normalizedFuelType == "gasoline" ||
+        normalizedFuelType == "benzinas" ||
+        normalizedFuelType == "95" ||
+        normalizedFuelType == "euro 95") {
+        return "GASOLINE_RETAIL_LT_EUR";
     }
 
-    if (normalizedFuelType == "diesel") {
-        return 1.88;
+    if (normalizedFuelType == "diesel" ||
+        normalizedFuelType == "dyzelinas") {
+        return "DIESEL_RETAIL_LT_EUR";
+    }
+
+    return "";
+}
+
+double FuelPriceAPI::getFallbackPrice(const QString &fuelType) const
+{
+    const QString normalizedFuelType = fuelType.trimmed().toLower();
+
+    if (normalizedFuelType == "petrol" ||
+        normalizedFuelType == "gasoline" ||
+        normalizedFuelType == "benzinas" ||
+        normalizedFuelType == "95" ||
+        normalizedFuelType == "euro 95") {
+        return 1.8241;
+    }
+
+    if (normalizedFuelType == "diesel" ||
+        normalizedFuelType == "dyzelinas") {
+        return 1.926;
     }
 
     return 0.0;

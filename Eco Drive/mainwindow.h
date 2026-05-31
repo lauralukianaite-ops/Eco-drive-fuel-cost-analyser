@@ -4,10 +4,12 @@
 #include <QMainWindow>
 
 #include "vehicleprofile.h"
-#include  "trip.h"
+#include "trip.h"
 #include "route.h"
+#include "fuelpriceapi.h"
 
 class QTableWidgetItem;
+class QKeyEvent;
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -34,13 +36,23 @@ private slots:
     void on_tableWidget_itemClicked(QTableWidgetItem *item);
     void on_petrolButton_clicked();
     void on_dieselButton_clicked();
+    void on_refreshButton_clicked();
 
 private:
+    void requestFuelPrice(const QString &fuelType, bool forceRefresh = false);
+    void updateFuelPriceDisplay(const QString &fuelType, double price);
+
     Ui::MainWindow *ui;
 
     VehicleProfile userProfile;
+    FuelPriceAPI *m_fuelPriceApi = nullptr;
+
+    double m_petrolPrice = 0.0;
+    double m_dieselPrice = 0.0;
+    QString m_pendingFuelType = "Diesel";
 
     int m_lastSelectedRow = -1;
+
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;

@@ -5,6 +5,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QSslSocket>
+#include <QMap>
 
 class APIManager : public QObject
 {
@@ -15,6 +16,9 @@ public:
 
 protected:
     void makeGetRequest(const QString &urlString);
+    void makeGetRequest(const QString &urlString,
+                        const QMap<QString, QString> &headers);
+
     void makePostRequest(const QString &urlString,
                          const QByteArray &body,
                          const QString &fieldMask); // Routes API reikalauja X-Goog-FieldMask

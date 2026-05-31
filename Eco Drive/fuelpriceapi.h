@@ -22,6 +22,7 @@ private slots:
 private:
     QString m_currentFuelType;
 
+    QString getOilPriceCode(const QString &fuelType) const;
     double getFallbackPrice(const QString &fuelType) const;
 };
 
