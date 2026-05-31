@@ -15,7 +15,7 @@ bool InputValidator::isPositiveNumber(const QString &value)
 QString InputValidator::validateProfileInputs(const QString &consumption)
 {
     if (!isPositiveNumber(consumption))
-        return "Please enter a valid fuel consumption";
+        return "Please enter average fuel consumption in L/100km";
 
     return "";
 }

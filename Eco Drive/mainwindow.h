@@ -46,7 +46,7 @@ private:
 
     VehicleProfile userProfile;
     FuelPriceAPI *m_fuelPriceApi = nullptr;
-
+    bool m_profileSaved = false;
     double m_petrolPrice = 0.0;
     double m_dieselPrice = 0.0;
     QString m_pendingFuelType = "Diesel";

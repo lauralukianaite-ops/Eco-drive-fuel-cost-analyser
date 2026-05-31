@@ -42,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
     QList<QPushButton*> buttons = {
         ui->routeAnalysisButton, ui->dashboardButton, ui->settingsButton,
         ui->saveProfileButton, ui->calculateButton,
-        ui->petrolButton, ui->dieselButton, ui->saveRouteButton, ui->deleteButton
+        ui->petrolButton, ui->dieselButton, ui->saveRouteButton, ui->deleteButton, ui->refreshButton
     };
     for (auto btn : buttons)
         btn->setCursor(Qt::PointingHandCursor);
@@ -74,6 +74,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->priceLine->setReadOnly(true);
     ui->fuelPriceProfileLine->setReadOnly(true);
+    ui->consumptionLine->setReadOnly(true);
 
     m_fuelPriceApi = new FuelPriceAPI(this);
 
@@ -92,8 +93,8 @@ MainWindow::MainWindow(QWidget *parent)
             this, [this](const QString &errorStr) {
                 QMessageBox::warning(this, "Fuel Price API Error", errorStr);
                 ui->currentPriceAPILabel->setText("Unavailable");
-                ui->priceLine->clear();
-                ui->fuelPriceProfileLine->clear();
+                ui->priceLine->setText("Unavailable");
+                ui->fuelPriceProfileLine->setText("Unavailable");
             });
 
     requestFuelPrice("Diesel");
@@ -125,11 +126,6 @@ void MainWindow::on_saveProfileButton_clicked(){
         model = "My Car";
     }
 
-    if (!ui->petrolButton->isChecked() && !ui->dieselButton->isChecked()) {
-        QMessageBox::warning(this, "Invalid Input", "Please select a fuel type");
-        return;
-    }
-
     QString error = InputValidator::validateProfileInputs(consumption);
     if (!error.isEmpty()) {
         QMessageBox::warning(this, "Invalid Input", error);
@@ -139,6 +135,8 @@ void MainWindow::on_saveProfileButton_clicked(){
     userProfile.setModel(model);
     userProfile.setConsumption(consumption.toDouble());
     userProfile.setFuelType(fuelType);
+
+    m_profileSaved = true;
 
     if(!model.isEmpty()){
         ui->carModelLabel->setText(model);
@@ -155,20 +153,22 @@ void MainWindow::on_calculateButton_clicked()
     QString start = ui->startLine->text().trimmed();
     QString dest = ui->destinationLine->text().trimmed();
 
-    QString consText = ui->avgCansumptionEnterLine->text().trimmed();
-
     QString validationMsg = InputValidator::validateRouteInputs(start, dest);
     if (!validationMsg.isEmpty()) {
         QMessageBox::warning(this, "Validation error", validationMsg);
         return;
     }
 
-    if (consText.isEmpty() || !InputValidator::isPositiveNumber(consText)) {
-        QMessageBox::warning(this, "Validation error", "Please enter correct fuel consumption.");
+    if (!m_profileSaved) {
+        QMessageBox::warning(
+            this,
+            "Vehicle Profile Required",
+            "Please save your vehicle profile before calculating a trip."
+            );
+        ui->stackedWidget->setCurrentWidget(ui->settingsPage);
         return;
     }
 
-    userProfile.setConsumption(consText.toDouble());
     userProfile.setFuelType(ui->petrolButton->isChecked() ? "Petrol" : "Diesel");
 
     Route route(start, dest);
@@ -223,6 +223,7 @@ void MainWindow::on_calculateButton_clicked()
 
     currentTrip->startCalculation();
 }
+
 void MainWindow::on_saveRouteButton_clicked() {
     QString distanceText = ui->distanceResult  ? ui->distanceResult->text()   : "";
     QString fuelText     = ui->distanceResult_2 ? ui->distanceResult_2->text() : "";
@@ -343,7 +344,7 @@ void MainWindow::requestFuelPrice(const QString &fuelType, bool forceRefresh)
     m_pendingFuelType = fuelType;
 
     ui->currentFuelPriceAPILabel->setText(
-        QString("Current %1 price (API)").arg(fuelType.toLower())
+        QString("Current %1 price").arg(fuelType.toLower())
         );
 
     ui->currentPriceAPILabel->setText("Loading...");
@@ -358,7 +359,7 @@ void MainWindow::updateFuelPriceDisplay(const QString &fuelType, double price)
     QString fuelPrice = QString::number(price, 'f', 4);
 
     ui->currentFuelPriceAPILabel->setText(
-        QString("Current %1 price (API)").arg(fuelType.toLower())
+        QString("Current %1 price").arg(fuelType.toLower())
         );
 
     ui->currentPriceAPILabel->setText(fuelPrice);
